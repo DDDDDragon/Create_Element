@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.mantodea.create_element.Mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mixins.create_element.refmap.json",
+  "mixins": [
+    "MixinBacktankItem",
+    "MixinRecipeApplier"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

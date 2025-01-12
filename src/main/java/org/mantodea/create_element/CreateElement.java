@@ -1,6 +1,7 @@
 package org.mantodea.create_element;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -11,50 +12,58 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
+import org.mantodea.create_element.ModClasses.ModCreativeTab;
 import org.slf4j.Logger;
+import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.Mixins;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(CreateElement.MODID)
 public class CreateElement
 {
-    // Define mod id in a common place for everything to reference
     public static final String MODID = "create_element";
-    // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public CreateElement()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // Register the commonSetup method for modloading
+        ModRegistries.LoadClasses();
+
+        ModRegistries.Register(modEventBus);
+
+        ModCreativeTab.Register(modEventBus);
+
+        modEventBus.addListener(this::register);
+
         modEventBus.addListener(this::commonSetup);
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-
     }
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS)
+        {
 
+        }
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
 
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
@@ -63,5 +72,14 @@ public class CreateElement
         {
 
         }
+    }
+
+    @SubscribeEvent
+    public void register(RegisterEvent event)
+    {
+        event.register(ForgeRegistries.Keys.ITEMS, ModRegistries::RegisterItems);
+        event.register(ForgeRegistries.Keys.BLOCKS, ModRegistries::RegisterBlocks);
+        event.register(ForgeRegistries.Keys.BIOMES, ModRegistries::RegisterBiomes);
+        event.register(ForgeRegistries.Keys.RECIPE_SERIALIZERS, ModRegistries::RegisterIngredients);
     }
 }

@@ -1,0 +1,24 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "type": "forge:intersection",
+      "children": [
+        {
+          "type": "create_element:calculate",
+          "val": 900,
+          "compare": 1,
+          "nbtID": "Air"
+        },
+        {
+          "tag": "create:pressurized_air_sources"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "item": "create_element:air_element"
+    }
+  ]
+}
