@@ -19,11 +19,11 @@ public abstract class MixinRecipeApplier {
     @Inject(method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;)Ljava/util/List;",
     at = @At("RETURN"), cancellable = true, remap = false)
     private static void applyRecipeOn(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir) {
-        CreateElement.LOGGER.debug("Mixin Start.");
+        CreateElement.LOGGER.info("Mixin Start.");
         List<ItemStack> items = cir.getReturnValue();
         if(stackIn.hasCraftingRemainingItem())
             items.add(stackIn.getCraftingRemainingItem());
-        CreateElement.LOGGER.debug("Modify return value.");
+        CreateElement.LOGGER.info("Modify return value.");
         cir.setReturnValue(items);
     }
 }
